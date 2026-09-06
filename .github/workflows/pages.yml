@@ -3,15 +3,6 @@ name: Deploy MOKO to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - index.html
-      - style.css
-      - core.js
-      - renderer.js
-      - app.js
-      - build.mjs
-      - server.mjs
-      - .github/workflows/pages.yml
   pull_request:
     branches: [main]
   workflow_dispatch:
