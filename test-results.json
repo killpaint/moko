@@ -1,0 +1,162 @@
+{
+  "environment": "Chromium 143, Linux headless, about:blank content injection; Canvas2D fallback. Managed browser forbids navigations.",
+  "limitations": [
+    "WebGPU GPU execution not verified: secure-context navigation unavailable.",
+    "IndexedDB persistence/reload not verified: opaque test origin denies storage.",
+    "Hardware performance not benchmarked."
+  ],
+  "results": [
+    {
+      "test": "中文工作台加载",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "示例含 161 个可编辑图层、两页",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "指针绘制矩形",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "指针拖拽改变坐标",
+      "passed": true,
+      "detail": {
+        "x": 120,
+        "y": 186
+      }
+    },
+    {
+      "test": "撤销拖拽",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "重做拖拽",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "八向控制柄缩放",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "属性面板圆角编辑",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "填充颜色更新",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "快捷键复制图层",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "编组与层级树",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "解组并保留子层",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "自动布局间距与位置",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "创建关联组件实例",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "主组件更新同步实例",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "中文多行文字编辑",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "字号行高字距与对齐",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "钢笔贝塞尔路径绘制",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "生产路径 PNG 2× 导出",
+      "passed": true,
+      "detail": {
+        "bytes": 184165
+      }
+    },
+    {
+      "test": "SVG 保留文字与矢量路径",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "SVG XML 格式有效",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "项目序列化验证与回读",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "拒绝恶意图层 ID 注入",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "画板演示预览",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "真实 2,000 图形测试页",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "撤销整页测试数据",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "390px 窄屏基础画布",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "test": "脚本无运行时异常",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "stress_canvas2d": {
+    "visible": 2000,
+    "total": 2000,
+    "cpuMs": 6.7000000001862645,
+    "drawCalls": 0,
+    "atlasPages": 0
+  }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="墨构 MOKO — 自由构想，认真成形。原生 HTML / JavaScript / WebGPU 设计工作台。">
+  <title>墨构 MOKO · 山野</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%232e6cff'/%3E%3Cpath d='M10 28V12h5l5 8 5-8h5v16h-5V20l-5 8-5-8v8z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <button class="brand" data-action="menu" title="墨构主菜单"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M4 19V5h4l4 7 4-7h4v14h-4v-7l-4 7-4-7v7z" fill="currentColor"/></svg></span><b>墨构</b><span class="chevron" data-icon="chevronDown"></span></button>
+    <span class="top-separator"></span>
+    <button class="workspace" data-action="documents" title="本地工作空间"><span data-icon="grid"></span><span>个人空间</span></button>
+    <span class="crumb-slash">/</span>
+    <input id="documentName" class="document-name" aria-label="文件名称" value="山野 · 户外生活" maxlength="80">
+    <span class="file-tag">设计文件</span>
+    <span class="save-status" id="saveStatus"><i></i><span>已保存到本机</span></span>
+    <div class="top-actions">
+      <button class="icon-button undo-top" data-action="undo" title="撤销 · ⌘ Z"><span data-icon="undo"></span></button>
+      <button class="icon-button undo-top" data-action="redo" title="重做 · ⇧ ⌘ Z"><span data-icon="redo"></span></button>
+      <span class="top-separator"></span>
+      <button class="avatar" data-action="about" title="本地创作空间，无需登录">我</button>
+      <button class="preview-button" data-action="present" title="预览画板"><span data-icon="play"></span><span>演示</span></button>
+      <button class="export-top" data-action="export"><span data-icon="export"></span><span>导出</span></button>
+    </div>
+  </header>
+  <aside class="left-panel">
+    <div class="left-tabs"><button class="active" data-lefttab="layers">文件</button><button data-lefttab="assets">资源</button><button class="icon-button search-button" data-action="search" title="查找图层 · ⌘ K"><span data-icon="search"></span></button></div>
+    <div id="layersPanel" class="left-body">
+      <section class="pages-section"><div class="section-header"><span>页面</span><button class="icon-button small" data-action="add-page" title="新建页面"><span data-icon="plus"></span></button></div><div id="pageList"></div></section>
+      <div class="layers-heading"><span>图层</span><div><button class="icon-button small" data-action="collapse-layers" title="折叠 / 展开图层"><span data-icon="fold"></span></button><button class="icon-button small" data-action="search" title="搜索图层"><span data-icon="search"></span></button></div></div>
+      <div id="layerTree" class="layer-tree" role="tree" aria-label="图层树"></div>
+    </div>
+    <div id="assetsPanel" class="assets-panel hidden"></div>
+    <div class="left-bottom"><div class="local-dot"></div><span>本地优先 · 自由创作</span><button class="icon-button small" data-action="help" title="快捷键与帮助"><span data-icon="help"></span></button></div>
+  </aside>
+  <main id="viewport" class="viewport" aria-label="设计画布" tabindex="0">
+    <canvas id="gpuCanvas"></canvas><canvas id="fallbackCanvas" class="hidden"></canvas><canvas id="overlayCanvas"></canvas>
+    <div class="canvas-topline"><div class="page-breadcrumb"><span data-icon="file"></span><span id="canvasPageName">界面设计</span><span class="dot-divider">/</span><span id="canvasSelectionName">全部画板</span></div><div class="canvas-settings"><button id="snapToggle" class="icon-button small active" data-action="snap" title="智能吸附 · S"><span data-icon="magnet"></span></button><button id="gridToggle" class="icon-button small" data-action="grid" title="显示 / 隐藏网格 · ⇧ G"><span data-icon="grid"></span></button><button class="icon-button small" data-action="canvas-menu" title="画布选项"><span data-icon="more"></span></button></div></div>
+    <div id="canvasHint" class="canvas-hint">空格拖动画布<span>·</span>⌘ / Ctrl + 滚轮缩放</div>
+    <div id="textEditor" class="text-editor hidden" contenteditable="plaintext-only" spellcheck="false" aria-label="编辑文字"></div>
+    <div id="commentEditor" class="comment-editor hidden"></div>
+    <div class="floating-toolbar" role="toolbar" aria-label="绘图工具">
+      <button class="tool active" data-tool="select" title="移动 · V"><span data-icon="cursor"></span></button>
+      <button class="tool" data-tool="frame" title="画板 · F"><span data-icon="frame"></span></button>
+      <i class="toolbar-divider"></i>
+      <button class="tool" data-tool="rect" title="矩形 · R"><span data-icon="rect"></span></button>
+      <button class="tool" data-tool="ellipse" title="椭圆 · O"><span data-icon="ellipse"></span></button>
+      <button class="tool" data-tool="line" title="线条 · L"><span data-icon="line"></span></button>
+      <button class="tool" data-tool="pen" title="钢笔 · P（拖出曲线手柄）"><span data-icon="pen"></span></button>
+      <button class="tool" data-tool="text" title="文字 · T"><span data-icon="text"></span></button>
+      <i class="toolbar-divider"></i>
+      <button class="tool" data-action="import-image" title="置入图片 · ⇧ ⌘ K"><span data-icon="image"></span></button>
+      <button class="tool" data-tool="hand" title="抓手 · H"><span data-icon="hand"></span></button>
+      <button class="tool" data-tool="comment" title="便签 · C"><span data-icon="comment"></span></button>
+    </div>
+    <div class="canvas-status"><button id="engineStatus" class="engine-status" data-action="engine" title="渲染引擎信息"><i></i><span>引擎初始化</span></button><span id="nodeCount"></span></div>
+    <div class="zoom-control"><button data-action="zoom-out" title="缩小"><span data-icon="minus"></span></button><button class="zoom-label" id="zoomLabel" data-action="zoom-menu">100%<span data-icon="chevronDown"></span></button><button data-action="zoom-in" title="放大"><span data-icon="plus"></span></button></div>
+  </main>
+  <aside class="right-panel"><div class="right-tabs"><button class="active" data-righttab="design">设计</button><button data-righttab="inspect">代码</button><button class="icon-button small" data-action="help" title="使用帮助"><span data-icon="settings"></span></button></div><div id="inspector" class="inspector"></div></aside>
+</div>
+<div id="menu" class="popover hidden" role="menu"></div><div id="tooltip" class="tooltip hidden"></div><div id="toast" class="toast hidden" role="status"></div>
+<div id="modalBackdrop" class="modal-backdrop hidden"><section id="modal" class="modal" role="dialog" aria-modal="true"></section></div>
+<div id="presentation" class="presentation hidden"></div>
+<input type="file" id="projectInput" accept=".moko,.json,application/json" hidden><input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" multiple hidden>
+<script src="core.js"></script><script src="renderer.js"></script><script src="app.js"></script>
+</body>
+</html>
