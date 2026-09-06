@@ -1,0 +1,78 @@
+name: Deploy MOKO to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - style.css
+      - core.js
+      - renderer.js
+      - app.js
+      - build.mjs
+      - server.mjs
+      - .github/workflows/pages.yml
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Check and build static site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Check JavaScript syntax
+        run: |
+          for file in core.js renderer.js app.js build.mjs server.mjs; do
+            node --check "$file"
+          done
+      - name: Build offline edition and stage site
+        run: |
+          node build.mjs
+          mkdir -p _site
+          cp moko-standalone.html _site/index.html
+          touch _site/.nojekyll
+          test -s _site/index.html
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+          retention-days: 7
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
